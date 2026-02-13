@@ -47,15 +47,17 @@ export const HeroSection = ({ clientName, eventDate }: HeroSectionProps) => {
                         com elegância e presença.
                     </h1>
 
-                    <p className="text-xl md:text-2xl text-muted-foreground font-light mb-10 max-w-2xl mx-auto">
-                        Proposta exclusiva para <span className="text-foreground font-semibold">{clientName}</span>
-                        {eventDate && (
-                            <>
-                                <span className="mx-2">•</span>
-                                <span className="text-foreground/80">{eventDate}</span>
-                            </>
-                        )}
-                    </p>
+                    {clientName && (
+                        <p className="text-xl md:text-2xl text-muted-foreground font-light mb-10 max-w-2xl mx-auto">
+                            Proposta exclusiva para <span className="text-foreground font-semibold">{clientName}</span>
+                            {eventDate && (
+                                <>
+                                    <span className="mx-2">•</span>
+                                    <span className="text-foreground/80">{eventDate}</span>
+                                </>
+                            )}
+                        </p>
+                    )}
 
                     <motion.button
                         whileHover={{ scale: 1.05 }}

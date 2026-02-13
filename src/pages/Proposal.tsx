@@ -21,7 +21,7 @@ const Proposal = () => {
             .split("-")
             .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
             .join(" ")
-        : "Debutante";
+        : "";
 
     return (
         <div className="min-h-screen bg-background font-body text-foreground overflow-x-hidden">

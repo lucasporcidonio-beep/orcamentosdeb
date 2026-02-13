@@ -25,7 +25,7 @@ const App = () => {
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
+            <Route path="/" element={<Proposal />} />
             <Route path="/proposta/:clientSlug" element={<Proposal />} />
             <Route path="/gerador" element={<Admin />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
