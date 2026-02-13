@@ -1,0 +1,166 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 50% 12%;
+    --foreground: 0 0% 95%;
+
+    --card: 220 45% 16%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 220 45% 16%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 45 100% 50%;
+    --primary-foreground: 220 50% 12%;
+
+    --secondary: 220 40% 22%;
+    --secondary-foreground: 0 0% 95%;
+
+    --muted: 220 30% 20%;
+    --muted-foreground: 220 15% 65%;
+
+    --accent: 45 100% 50%;
+    --accent-foreground: 220 50% 12%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 220 30% 25%;
+    --input: 220 30% 25%;
+    --ring: 45 100% 50%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 220 50% 10%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 45 100% 50%;
+    --sidebar-primary-foreground: 220 50% 12%;
+    --sidebar-accent: 220 40% 18%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 220 30% 25%;
+    --sidebar-ring: 45 100% 50%;
+
+    --gold: 45 100% 50%;
+    --gold-light: 45 100% 65%;
+    --navy-deep: 220 55% 8%;
+    --navy: 220 50% 15%;
+    --navy-light: 220 40% 25%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Playfair Display', serif;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: 'Playfair Display', serif;
+  }
+  
+  .font-elegant {
+    font-family: 'Cormorant Garamond', serif;
+  }
+  
+  .font-body {
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .text-gold {
+    color: hsl(var(--gold));
+  }
+
+  .bg-navy-deep {
+    background-color: hsl(var(--navy-deep));
+  }
+
+  .bg-navy {
+    background-color: hsl(var(--navy));
+  }
+
+  .bg-navy-light {
+    background-color: hsl(var(--navy-light));
+  }
+
+  .stars-bg {
+    background-image: 
+      radial-gradient(2px 2px at 20px 30px, hsl(0 0% 100% / 0.3), transparent),
+      radial-gradient(2px 2px at 40px 70px, hsl(0 0% 100% / 0.2), transparent),
+      radial-gradient(1px 1px at 90px 40px, hsl(0 0% 100% / 0.4), transparent),
+      radial-gradient(1px 1px at 130px 80px, hsl(0 0% 100% / 0.2), transparent),
+      radial-gradient(2px 2px at 160px 30px, hsl(0 0% 100% / 0.3), transparent),
+      radial-gradient(1px 1px at 200px 60px, hsl(0 0% 100% / 0.15), transparent),
+      radial-gradient(1px 1px at 50px 120px, hsl(0 0% 100% / 0.25), transparent),
+      radial-gradient(2px 2px at 180px 110px, hsl(0 0% 100% / 0.2), transparent),
+      radial-gradient(1px 1px at 110px 150px, hsl(0 0% 100% / 0.3), transparent),
+      radial-gradient(1px 1px at 250px 90px, hsl(0 0% 100% / 0.2), transparent);
+    background-size: 300px 200px;
+  }
+
+  .gradient-navy {
+    background: linear-gradient(180deg, hsl(220 55% 8%) 0%, hsl(220 50% 15%) 50%, hsl(220 45% 12%) 100%);
+  }
+
+  .price-badge {
+    background: hsl(var(--gold));
+    color: hsl(var(--navy-deep));
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+  }
+
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--gold) / 0.4), transparent);
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--navy-deep));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--gold) / 0.4);
+  border-radius: 3px;
+}
+
+/* Animations */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-twinkle {
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
