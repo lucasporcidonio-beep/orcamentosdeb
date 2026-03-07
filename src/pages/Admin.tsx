@@ -200,6 +200,56 @@ export default function Admin() {
                                                     </label>
                                                 ))}
                                             </div>
+
+                                            {/* Custom features added that aren't in the default list */}
+                                            {(pkg.features || []).filter(f => !availableFeatures.includes(f) && f !== "Montado sob medida para o seu evento").map(customFeat => (
+                                                <div key={customFeat} className="flex items-center gap-2 mt-2 text-sm p-2 rounded bg-primary/10 border border-primary/20">
+                                                    <div className="relative flex items-center cursor-pointer">
+                                                        <input
+                                                            type="checkbox"
+                                                            className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 appearance-none bg-background checked:bg-primary checked:border-primary"
+                                                            checked={true}
+                                                            onChange={() => handleFeatureToggle(index, customFeat)}
+                                                        />
+                                                        <Check className="absolute h-3 w-3 text-primary-foreground opacity-0 peer-checked:opacity-100 left-0.5 top-0.5 pointer-events-none" strokeWidth={3} />
+                                                    </div>
+                                                    <span className="leading-tight flex-1">{customFeat}</span>
+                                                </div>
+                                            ))}
+
+                                            <div className="mt-4 pt-4 border-t border-border/50">
+                                                <Label className="mb-2 block text-sm">Adicionar Item Personalizado Exclusivo:</Label>
+                                                <div className="flex gap-2">
+                                                    <Input
+                                                        placeholder="Ex: Making Of Extra (R$ 800)"
+                                                        id={`custom-feature-input-${index}`}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'Enter') {
+                                                                e.preventDefault();
+                                                                const val = e.currentTarget.value.trim();
+                                                                if (val) {
+                                                                    handleFeatureToggle(index, val);
+                                                                    e.currentTarget.value = "";
+                                                                }
+                                                            }
+                                                        }}
+                                                    />
+                                                    <Button
+                                                        type="button"
+                                                        variant="secondary"
+                                                        onClick={(e) => {
+                                                            const input = document.getElementById(`custom-feature-input-${index}`) as HTMLInputElement;
+                                                            if (input && input.value.trim()) {
+                                                                handleFeatureToggle(index, input.value.trim());
+                                                                input.value = "";
+                                                            }
+                                                        }}
+                                                    >
+                                                        Adicionar
+                                                    </Button>
+                                                </div>
+                                                <p className="text-xs text-muted-foreground mt-2">*Digite um serviço e o valor que desejar, depois clique em Adicionar (ou pressione Enter).</p>
+                                            </div>
                                         </div>
                                     )}
                                 </div>
