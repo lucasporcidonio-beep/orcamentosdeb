@@ -1,54 +1,13 @@
 import { Check } from "lucide-react";
 import { motion } from "framer-motion";
-
-const packages = [
-    {
-        name: "Constelação",
-        subtitle: "Experiência Completa",
-        price: "1999",
-        installments: "12x R$ 200",
-        features: [
-            "Cobertura fotográfica até 5 horas",
-            "250 a 300 fotos digitais alta resolução",
-            "Ensaio fotográfico pré-evento",
-            "Quadro 60x40",
-            "Álbum Fotolivro 360° (20x20, 30 pág)",
-            "(Bônus) Vídeo Vida",
-        ],
-        highlight: false,
-        recommended: true,
-        tag: "Recomendado",
-    },
-    {
-        name: "Lua Cheia",
-        subtitle: "Equilíbrio Ideal",
-        price: "1299",
-        installments: "12x R$ 130",
-        features: [
-            "Cobertura fotográfica até 5 horas",
-            "200 a 250 fotos digitais alta resolução",
-            "Ensaio fotográfico pré-evento",
-            "(Bônus) Banner personalizado",
-        ],
-        highlight: true,
-        tag: "Mais Escolhido",
-        recommended: false,
-    },
-    {
-        name: "Estrela Cadente",
-        subtitle: "Essencial",
-        price: "699",
-        installments: "12x R$ 70",
-        features: [
-            "Cobertura fotográfica até 4 horas",
-            "150 a 200 fotos digitais alta resolução",
-        ],
-        highlight: false,
-        recommended: false,
-    },
-];
+import { useParams } from "react-router-dom";
+import { getProposalData } from "@/data/proposalData";
 
 export const PackagesSection = () => {
+    const { clientSlug } = useParams();
+    const data = getProposalData(clientSlug);
+    const { packages } = data;
+
     return (
         <section id="packages" className="py-20 px-4 bg-muted/30">
             <div className="container max-w-6xl mx-auto">
@@ -64,7 +23,7 @@ export const PackagesSection = () => {
                 <div className="grid md:grid-cols-3 gap-8 items-start">
                     {packages.map((pkg, index) => (
                         <motion.div
-                            key={index}
+                            key={pkg.id || index}
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
@@ -97,7 +56,7 @@ export const PackagesSection = () => {
                                     </span>
                                 </div>
                                 <p className="text-sm text-primary font-medium">
-                                    {pkg.installments}
+                                    {pkg.installments.count}x R$ {pkg.installments.value}
                                 </p>
                             </div>
 
@@ -125,3 +84,4 @@ export const PackagesSection = () => {
         </section>
     );
 };
+
