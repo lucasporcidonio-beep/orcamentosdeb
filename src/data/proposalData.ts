@@ -73,6 +73,18 @@ const defaultPackages: Package[] = [
         highlight: false,
         recommended: false,
     },
+    {
+        id: "personalizado",
+        name: "Personalizado",
+        subtitle: "Você no Controle",
+        price: 0,
+        installments: { count: 12, value: 0 },
+        features: [
+            "Montado sob medida para o seu evento"
+        ],
+        highlight: false,
+        recommended: false,
+    }
 ];
 
 const defaultAddons: Addon[] = [
@@ -84,6 +96,8 @@ const defaultAddons: Addon[] = [
     { item: "Álbum 25x25 (30 páginas)", price: "R$999" },
     { item: "Álbum 30x30 (30 páginas)", price: "R$1299" },
     { item: "Vídeo Vida (Até 10 Min)", price: "R$150" },
+    { item: "Filmmaker", price: "R$1000" },
+    { item: "Storymaker", price: "R$500" }
 ];
 
 export const defaultData: ProposalData = {
@@ -126,6 +140,7 @@ export const getProposalData = (clientSlug?: string): ProposalData => {
         const searchParams = new URLSearchParams(window.location.search);
 
         const shortConfig = searchParams.get("p");
+        const customFeaturesEncoded = searchParams.get("cf"); // New param for custom features
         const configParam = searchParams.get("config");
 
         if (shortConfig) {
@@ -150,6 +165,17 @@ export const getProposalData = (clientSlug?: string): ProposalData => {
                         }
                     }
                 });
+
+                // Decode custom features if they exist
+                if (customFeaturesEncoded && tempPackages.length >= 4) {
+                    try {
+                        const decodedFeatures = decodeURIComponent(escape(decode(customFeaturesEncoded)));
+                        tempPackages[3].features = JSON.parse(decodedFeatures);
+                    } catch (e) {
+                        console.error("Failed to parse custom features", e);
+                    }
+                }
+
                 data.packages = tempPackages;
             } catch (e) {
                 console.error("Failed to parse short config", e);

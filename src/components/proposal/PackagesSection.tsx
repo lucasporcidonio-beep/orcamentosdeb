@@ -20,7 +20,7 @@ export const PackagesSection = () => {
                     </p>
                 </div>
 
-                <div className="grid md:grid-cols-3 gap-8 items-start">
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 items-start">
                     {packages.map((pkg, index) => (
                         <motion.div
                             key={pkg.id || index}
@@ -29,15 +29,15 @@ export const PackagesSection = () => {
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.1 }}
                             className={`relative rounded-2xl p-8 border ${pkg.recommended
-                                    ? "bg-card border-primary shadow-2xl scale-105 z-10"
-                                    : "bg-card/50 border-border shadow-lg"
+                                ? "bg-card border-primary shadow-2xl scale-105 z-10"
+                                : "bg-card/50 border-border shadow-lg"
                                 }`}
                         >
                             {pkg.tag && (
                                 <div
                                     className={`absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-sm font-bold tracking-wide uppercase ${pkg.recommended
-                                            ? "bg-primary text-primary-foreground"
-                                            : "bg-secondary text-secondary-foreground"
+                                        ? "bg-primary text-primary-foreground"
+                                        : "bg-secondary text-secondary-foreground"
                                         }`}
                                 >
                                     {pkg.tag}
@@ -71,8 +71,8 @@ export const PackagesSection = () => {
 
                             <button
                                 className={`w-full py-4 rounded-xl font-bold transition-all ${pkg.recommended
-                                        ? "bg-primary text-primary-foreground hover:shadow-lg hover:shadow-primary/25 hover:scale-[1.02]"
-                                        : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                                    ? "bg-primary text-primary-foreground hover:shadow-lg hover:shadow-primary/25 hover:scale-[1.02]"
+                                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
                                     }`}
                             >
                                 Escolher este pacote

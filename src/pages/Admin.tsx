@@ -24,6 +24,27 @@ export default function Admin() {
     const [packages, setPackages] = useState<Package[]>(defaultData.packages);
     const [generatedLink, setGeneratedLink] = useState("");
 
+    const availableFeatures = [
+        "Cobertura fotográfica até 5 horas",
+        "Cobertura fotográfica até 4 horas",
+        "Ensaio fotográfico pré-evento",
+        "250 a 300 fotos digitais alta resolução",
+        "200 a 250 fotos digitais alta resolução",
+        "150 a 200 fotos digitais alta resolução",
+        "Quadro 60x40",
+        "Banner personalizado",
+        "Banner 90x60",
+        "Álbum Fotolivro 360° (20x20, 30 pág)",
+        "Álbum 25x25 (30 páginas)",
+        "Álbum 30x30 (30 páginas)",
+        "(Bônus) Vídeo Vida",
+        "Filmmaker",
+        "Storymaker",
+        "Fotos Impressas",
+        "Pack 10 Fotos",
+        "Pack 30 Fotos"
+    ];
+
     const handlePriceChange = (index: number, newPrice: string) => {
         const updatedPackages = [...packages];
         updatedPackages[index].price = Number(newPrice);
@@ -33,6 +54,24 @@ export default function Admin() {
     const handleInstallmentValueChange = (index: number, newValue: string) => {
         const updatedPackages = [...packages];
         updatedPackages[index].installments.value = Number(newValue);
+        setPackages(updatedPackages);
+    };
+
+    const handleFeatureToggle = (pkgIndex: number, feature: string) => {
+        const updatedPackages = [...packages];
+        const currentFeatures = updatedPackages[pkgIndex].features || [];
+
+        if (currentFeatures.includes(feature)) {
+            updatedPackages[pkgIndex].features = currentFeatures.filter(f => f !== feature);
+        } else {
+            updatedPackages[pkgIndex].features = [...currentFeatures, feature];
+        }
+
+        // Remove the default "Montado sob medida..." placeholder if they start adding real features
+        if (updatedPackages[pkgIndex].features.includes("Montado sob medida para o seu evento") && updatedPackages[pkgIndex].features.length > 1) {
+            updatedPackages[pkgIndex].features = updatedPackages[pkgIndex].features.filter(f => f !== "Montado sob medida para o seu evento");
+        }
+
         setPackages(updatedPackages);
     };
 
@@ -55,6 +94,14 @@ export default function Admin() {
 
         const baseUrl = window.location.origin;
         let url = `${baseUrl}/proposta/${slug}?p=${pValues}`;
+
+        // Add custom features for the 4th package (Personalizado)
+        if (packages.length >= 4 && packages[3].id === "personalizado") {
+            const customFeaturesStr = JSON.stringify(packages[3].features);
+            // double encode to hide the JSON structure safely
+            const cfParam = encode(unescape(encodeURIComponent(customFeaturesStr)));
+            url += `&cf=${cfParam}`;
+        }
 
         if (eventDate) {
             const formattedDate = new Date(eventDate).toLocaleDateString("pt-BR");
@@ -115,7 +162,7 @@ export default function Admin() {
                             {packages.map((pkg, index) => (
                                 <div key={pkg.id} className="p-4 border rounded-lg bg-card/50">
                                     <h3 className="font-bold text-lg mb-4 text-primary">{pkg.name}</h3>
-                                    <div className="grid gap-4 md:grid-cols-2">
+                                    <div className="grid gap-4 md:grid-cols-2 mb-4">
                                         <div className="space-y-2">
                                             <Label>Preço à Vista (R$)</Label>
                                             <Input
@@ -133,6 +180,28 @@ export default function Admin() {
                                             />
                                         </div>
                                     </div>
+
+                                    {pkg.id === "personalizado" && (
+                                        <div className="mt-6 pt-6 border-t border-border">
+                                            <Label className="mb-4 block text-md">Selecionar Itens do Pacote Personalizado:</Label>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                                {availableFeatures.map(feature => (
+                                                    <label key={feature} className="flex items-center gap-2 text-sm cursor-pointer p-2 rounded hover:bg-muted/50">
+                                                        <div className="relative flex items-center">
+                                                            <input
+                                                                type="checkbox"
+                                                                className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 appearance-none bg-background checked:bg-primary checked:border-primary"
+                                                                checked={(pkg.features || []).includes(feature)}
+                                                                onChange={() => handleFeatureToggle(index, feature)}
+                                                            />
+                                                            <Check className="absolute h-3 w-3 text-primary-foreground opacity-0 peer-checked:opacity-100 left-0.5 top-0.5 pointer-events-none" strokeWidth={3} />
+                                                        </div>
+                                                        <span className="leading-tight">{feature}</span>
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                         </CardContent>
