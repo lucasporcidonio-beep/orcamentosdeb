@@ -104,6 +104,15 @@ const clientOverrides: Record<string, Partial<ProposalData>> = {
     }
 };
 
+import { decode } from "js-base64";
+
+// Reverse mapping for obfuscation
+const reverseMap: Record<string, string> = {
+    'x': '0', 'm': '1', 'q': '2', 'p': '3', 'v': '4',
+    'l': '5', 'k': '6', 'h': '7', 'w': '8', 'z': '9',
+    'a': '-', 'j': '_'
+};
+
 export const getProposalData = (clientSlug?: string): ProposalData => {
     let data = { ...defaultData };
 
@@ -121,7 +130,13 @@ export const getProposalData = (clientSlug?: string): ProposalData => {
 
         if (shortConfig) {
             try {
-                const packagePrices = shortConfig.split('_');
+                // Decode from base64 first
+                const decodedLetters = decode(shortConfig);
+
+                // Unmap letters back to digits and separators
+                const unmappedRaw = decodedLetters.split('').map(char => reverseMap[char] || char).join('');
+
+                const packagePrices = unmappedRaw.split('_');
                 const tempPackages = [...data.packages];
                 packagePrices.forEach((priceStr, index) => {
                     if (index < tempPackages.length) {

@@ -8,6 +8,15 @@ import { Check, Copy, Link as LinkIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 
+import { encode } from "js-base64";
+
+// Obfuscation mapping for digits
+const digitMap: Record<string, string> = {
+    '0': 'x', '1': 'm', '2': 'q', '3': 'p', '4': 'v',
+    '5': 'l', '6': 'k', '7': 'h', '8': 'w', '9': 'z',
+    '-': 'a', '_': 'j'
+};
+
 export default function Admin() {
     const [clientName, setClientName] = useState("");
     const [eventDate, setEventDate] = useState("");
@@ -35,8 +44,14 @@ export default function Admin() {
 
         const slug = clientName.toLowerCase().replace(/\s+/g, "-");
 
-        // Format short URL prices string: p1-i1_p2-i2_p3-i3
-        const pValues = packages.map(pkg => `${pkg.price}-${pkg.installments.value}`).join('_');
+        // Format and obfuscate the short URL string
+        const rawValues = packages.map(pkg => `${pkg.price}-${pkg.installments.value}`).join('_');
+
+        // Convert digits to letters using digitMap
+        const mappedLetters = rawValues.split('').map(char => digitMap[char] || char).join('');
+
+        // Base64 encode it completely to hide our custom mapping
+        const pValues = encode(mappedLetters);
 
         const baseUrl = window.location.origin;
         let url = `${baseUrl}/proposta/${slug}?p=${pValues}`;
