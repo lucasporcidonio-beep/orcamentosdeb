@@ -142,7 +142,7 @@ export default function Admin() {
                                         <Input
                                             value={generatedLink}
                                             readOnly
-                                            className="font-mono text-sm bg-white"
+                                            className="font-mono text-sm bg-background text-foreground"
                                         />
                                         <Button onClick={copyToClipboard} variant="outline">
                                             <Copy className="w-4 h-4" />
