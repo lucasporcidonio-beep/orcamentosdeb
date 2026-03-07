@@ -112,12 +112,34 @@ export const getProposalData = (clientSlug?: string): ProposalData => {
         data = { ...data, ...clientOverrides[clientSlug] };
     }
 
-    // 2. Apply dynamic URL overrides (if 'config' param exists)
-    // This allows the Admin Generator to work without a database
+    // 2. Apply dynamic URL overrides
     if (typeof window !== "undefined") {
         const searchParams = new URLSearchParams(window.location.search);
+
+        const shortConfig = searchParams.get("p");
         const configParam = searchParams.get("config");
-        if (configParam) {
+
+        if (shortConfig) {
+            try {
+                const packagePrices = shortConfig.split('_');
+                const tempPackages = [...data.packages];
+                packagePrices.forEach((priceStr, index) => {
+                    if (index < tempPackages.length) {
+                        const [price, install] = priceStr.split('-');
+                        if (price && install) {
+                            tempPackages[index] = {
+                                ...tempPackages[index],
+                                price: Number(price),
+                                installments: { ...tempPackages[index].installments, value: Number(install) }
+                            };
+                        }
+                    }
+                });
+                data.packages = tempPackages;
+            } catch (e) {
+                console.error("Failed to parse short config", e);
+            }
+        } else if (configParam) {
             try {
                 // Try to decode as UTF-8 (new format)
                 const decoded = decodeURIComponent(escape(atob(configParam)));

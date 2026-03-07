@@ -35,17 +35,11 @@ export default function Admin() {
 
         const slug = clientName.toLowerCase().replace(/\s+/g, "-");
 
-        // Prepare overrides object
-        // We only want to send the packages array if it's different (or just send it anyway for simplicity)
-        const overrides = {
-            packages: packages
-        };
-
-        // Encode to Base64 (UTF-8 safe)
-        const configString = btoa(unescape(encodeURIComponent(JSON.stringify(overrides))));
+        // Format short URL prices string: p1-i1_p2-i2_p3-i3
+        const pValues = packages.map(pkg => `${pkg.price}-${pkg.installments.value}`).join('_');
 
         const baseUrl = window.location.origin;
-        let url = `${baseUrl}/proposta/${slug}?config=${configString}`;
+        let url = `${baseUrl}/proposta/${slug}?p=${pValues}`;
 
         if (eventDate) {
             const formattedDate = new Date(eventDate).toLocaleDateString("pt-BR");
