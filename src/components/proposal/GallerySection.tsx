@@ -2,8 +2,6 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Maximize2, Pause, Play } from "lucide-react";
 
-import useEmblaCarousel from "embla-carousel-react";
-import Autoplay from "embla-carousel-autoplay";
 
 // Dynamically import all images from the debutantes folder
 // Using relative path to ensure glob works correctly
@@ -18,18 +16,6 @@ export const GallerySection = () => {
     const [isPaused, setIsPaused] = useState(false);
     const [progress, setProgress] = useState(0);
 
-    const [emblaRef] = useEmblaCarousel({
-        loop: true,
-        align: "start",
-        dragFree: true
-    }, [
-        Autoplay({
-            delay: 0,
-            stopOnInteraction: false,
-            stopOnMouseEnter: true,
-            playOnInit: true
-        })
-    ]);
 
     // Randomly select images on mount
     useEffect(() => {
@@ -59,7 +45,7 @@ export const GallerySection = () => {
     useEffect(() => {
         if (selectedIndex === null || isPaused) return;
 
-        const duration = 7000; // 7 seconds
+        const duration = 10000; // 10 seconds
         const interval = 100; // Update every 100ms
 
         const timer = setInterval(() => {
@@ -95,41 +81,30 @@ export const GallerySection = () => {
                 </p>
             </div>
 
-            {/* Auto-playing Carousel */}
-            <div className="overflow-hidden w-full px-4" ref={emblaRef}>
-                <div
-                    className="flex touch-pan-y -ml-4"
-                    style={{ transitionTimingFunction: 'linear' }} // Makes Autoplay smooth
-                >
-                    {displayImages.map((src, index) => (
-                        <div
-                            key={index}
-                            className="flex-none min-w-[280px] w-4/5 sm:w-1/2 md:w-1/3 lg:w-1/4 pl-4"
+            {/* Pinterest / Masonry Layout using CSS Columns */}
+            <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4 px-4">
+                {displayImages.map((src, index) => (
+                    <div key={index} className="break-inside-avoid">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: index * 0.05 }}
+                            className="relative group overflow-hidden rounded-xl cursor-pointer"
+                            onClick={() => setSelectedIndex(index)}
                         >
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: index * 0.05 }}
-                                className="relative group overflow-hidden rounded-xl cursor-pointer aspect-[3/4]"
-                                onClick={() => setSelectedIndex(index)}
-                            >
-                                <img
-                                    src={src}
-                                    alt={`Gallery ${index}`}
-                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                    loading="lazy"
-                                />
-                                {/* Instagram Stories like border overlay */}
-                                <div className="absolute inset-0 border-2 border-primary/0 group-hover:border-primary/50 rounded-xl transition-colors duration-300 pointer-events-none" />
-
-                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                    <Maximize2 className="text-white w-8 h-8 drop-shadow-lg scale-50 group-hover:scale-100 transition-transform duration-300" />
-                                </div>
-                            </motion.div>
-                        </div>
-                    ))}
-                </div>
+                            <img
+                                src={src}
+                                alt={`Gallery ${index}`}
+                                className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
+                                loading="lazy"
+                            />
+                            <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <Maximize2 className="text-white w-8 h-8 drop-shadow-lg scale-75 group-hover:scale-100 transition-transform duration-300" />
+                            </div>
+                        </motion.div>
+                    </div>
+                ))}
             </div>
 
             {/* Stories / Lightbox Modal */}
