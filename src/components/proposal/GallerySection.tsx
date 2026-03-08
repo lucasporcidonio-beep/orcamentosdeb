@@ -187,7 +187,7 @@ export const GallerySection = () => {
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95 }}
                             transition={{ duration: 0.3 }}
-                            className="relative max-h-[90vh] max-w-[90vw] md:max-w-4xl flex items-center justify-center p-2"
+                            className="relative w-screen h-screen flex items-center justify-center p-0"
                             onClick={(e) => e.stopPropagation()}
                             onMouseEnter={() => setIsPaused(true)}
                             onMouseLeave={() => setIsPaused(false)}
@@ -197,12 +197,12 @@ export const GallerySection = () => {
                             <img
                                 src={displayImages[selectedIndex]}
                                 alt="Gallery View"
-                                className="max-h-[85vh] w-auto max-w-full object-contain rounded-lg shadow-2xl"
+                                className="w-full h-full object-contain rounded-none"
                             />
 
                             {/* Pause Indicator (optional) */}
                             {isPaused && (
-                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/50 p-4 rounded-full backdrop-blur-sm pointer-events-none">
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/50 p-4 rounded-full backdrop-blur-sm pointer-events-none transition-opacity">
                                     <Pause className="w-8 h-8 text-white fill-white" />
                                 </div>
                             )}
